@@ -15,6 +15,6 @@ async function dbConnect (){
         console.log("Database connection failed: ", error);
         process.exit
     }
-}
+} 
 
 export default dbConnect()
