@@ -1,20 +1,21 @@
-import mongoose, { connection } from "mongoose";
+import mongoose from "mongoose";
 
-async function dbConnect (){
-    if (connection.isConnected) {
+async function dbConnect() {
+    if (mongoose.connection.readyState) {
         console.log("Database is already connected");
-        return
+        return;
     }
-    try {
-       const db = mongoose.connect(process.env.MONGODB_URI )
-       connection.isConnected = await db.connections[0].readyState
-       console.log("DB connected successfully");
-       
-       
-    } catch (error) {
-        console.log("Database connection failed: ", error);
-        process.exit
-    }
-} 
 
-export default dbConnect()
+    try {
+        const db = await mongoose.connect(`${process.env.MONGODB_URI}/myDatabase`, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
+        console.log("DB connected successfully");
+    } catch (error) {
+        console.error("Database connection failed: ", error);
+        process.exit(1);
+    }
+}
+
+export default dbConnect;

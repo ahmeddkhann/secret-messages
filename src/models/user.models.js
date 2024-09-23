@@ -31,7 +31,7 @@ const userSchema = new Schema ({
         default: true
     },
     isVerified: {
-        type: boolean,
+        type: Boolean,
         default: false
     },
     messages: []
