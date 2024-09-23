@@ -1,9 +1,11 @@
+import messageModel from "@/models/message.models";
+
 class ApiResponse {
     constructor(success, message, isAcceptingMessage = undefined, messages = undefined) {
         this.success = success;
         this.message = message;
         this.isAcceptingMessage = isAcceptingMessage;
-        this.messages = messages;
+        this.messages = messageModel || messages ; 
     }
 }
 
