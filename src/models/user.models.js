@@ -1,5 +1,4 @@
 import mongoose, {Schema} from "mongoose";
-import { boolean } from "zod";
 
 const userSchema = new Schema ({
     email: {
@@ -17,7 +16,6 @@ const userSchema = new Schema ({
     },
     verifyCode: {
         type: String,
-        required: [true, "verify code is required"]
     },
     password: {
         type: String,
@@ -32,7 +30,7 @@ const userSchema = new Schema ({
     },
     isVerified: {
         type: Boolean,
-        default: false
+        default: true
     },
     messages: []
    

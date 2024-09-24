@@ -1,18 +1,28 @@
-import {resend} from "../lib/resend"
-import VerificationEmail from "../../emails/verificationEmail"
-import ApiResponse from "@/types/ApiResponse"
+import { NextResponse } from 'next/server';
+import VerificationEmail from '../../emails/verificationEmail';
+import resend from '@/lib/resend';
 
-export async function sendVerificationEmail (email, username, otp){
+export async function sendVerificationEmail(email, username, otp) {
     try {
         await resend.emails.send({
             from: 'onboarding@gmail.com',
             to: email,
             subject: 'Mystery Message | Verification Code',
-            react: VerificationEmail({username, otp}),
-          });
-          return new ApiResponse ({status: true, message: `verification email sent to ${username}`})
+            react: VerificationEmail({ username, otp }),
+        });
+        
+        // Corrected response format
+        return NextResponse.json(
+            { success: true, message: `Verification email sent to ${username}` },
+            { status: 200 } // Set status code here in the headers
+        );
     } catch (error) {
-        console.error('error while sending verification email: ', error)
-        return new ApiResponse({status: false, message: `verification email to ${username} failed!!!`})
+        console.error('Error while sending verification email: ', error);
+
+        // Corrected response format for error case
+        return NextResponse.json(
+            { success: false, message: `Verification email failed to send to ${username}` },
+            { status: 500 } // Set status code here in the headers
+        );
     }
 }
