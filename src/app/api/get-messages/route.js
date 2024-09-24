@@ -47,7 +47,14 @@ export async function POST (request){
             {status: 200}
         )
     } catch (error) {
-        
+        console.error("Error while sending messages ", error)
+        return Response.json(
+            {
+                success: false,
+                message: "error while user getting messages"
+            },
+            {status: 500}
+        )
     }
      
 }
