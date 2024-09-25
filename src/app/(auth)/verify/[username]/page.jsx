@@ -14,7 +14,6 @@ import { useParams } from 'next/navigation'
 import { useRouter } from 'next/router'
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import * as z from "zod"
 
 const VerifyAccount = () => {
     const router = useRouter()
