@@ -11,7 +11,7 @@ export default function Home() {
           Send and receive encrypted messages with ease and security.
         </p>
         <a
-          href="/send-message"
+          href="/sign-up"
           className="inline-block px-6 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition duration-200"
         >
           Start Messaging
