@@ -18,7 +18,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@react-email/components";
+import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 
 const page = () => {
@@ -50,9 +50,10 @@ const page = () => {
           const response = await axios.get(
             `/api/check-username-unique?username=${debouncedUsername}`
           );
-          setUsernameMessage(response.data.message);
+          let message = response.data.message
+          setUsernameMessage(message);
         } catch (error) {
-          const axiosError = AxiosError;
+          const axiosError = AxiosError
           setUsernameMessage(
             axiosError.response?.data.message ?? "Error checking username"
           );
@@ -124,6 +125,12 @@ const page = () => {
                       }}
                     />
                   </FormControl>
+                  {isCheckingUsername && <Loader2
+                   className="animate-spin"/>}
+                   <p className={`text-sm ${usernameMessage ===
+                    "Username is unique"? "text-green-500": "text-red-500"}`}>
+
+                    </p>
                   <FormDescription>
                     Note: Do not use special characters like #, $, %, ^, & and !
                   </FormDescription>
@@ -167,7 +174,7 @@ const page = () => {
               )}
             />
 
-           <Button type="submit" disabled= {isSubmitting}>
+          <Button className="" type="submit" disabled= {isSubmitting}>
             {
               isSubmitting? (
                 <>
@@ -178,6 +185,7 @@ const page = () => {
               )
             }
            </Button>
+          
           </form>
         </FormProvider>
 
