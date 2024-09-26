@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
-import { signInSchema } from "@/schemas/acceptMessageSchema";
+import { signInSchema } from "@/schemas/signInSchema";
 import { signIn } from "next-auth/react";
 import {
   FormField,

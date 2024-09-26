@@ -1,66 +1,57 @@
-import dbConnect from "@/lib/dbConnect";
-import userModel from "@/models/user.models";
+import dbConnect from '@/lib/dbConnect';
+import userModel from '@/models/user.models';
 
 export async function POST(request) {
-   await dbConnect()
+  // Connect to the database
+  await dbConnect();
 
-   try {
-     const {username, code} = await request.json()
-    const decodedUsername = decodeURIComponent(username)
-   const user = await userModel.findOne({
-        username: decodedUsername
-    })
+  try {
+    const { username, code } = await request.json();
+    const decodedUsername = decodeURIComponent(username);
+    const user = await userModel.find({ username: decodedUsername });
 
-    if (!user){
-        return Response.json(
-            {
-                success: false,
-                message: "User not found"
-            },
-            {status: 500}
-        )
+    if (!user) {
+      return Response.json(
+        { success: false, message: 'User not found' },
+        { status: 404 }
+      );
     }
 
-    const isCodeValid = user.verifyCode === code
-    const isCodeNotExpired = new Date(user.verifyCodeExpiry) > new Date()
+    // Check if the code is correct and not expired
+    const isCodeValid = user.verifyCode === code;
+    const isCodeNotExpired = new Date(user.verifyCodeExpiry) < new Date();
 
-    if (isCodeValid && isCodeNotExpired){
-        user.isVerified = true
-        await user.save()
-        return Response.json(
-            {
-                success: true,
-                message: "account verified successfully"
-            },
-            {status: 201}
-        )
-    } else if (!isCodeNotExpired){
-        return Response.json(
-            {
-                success: false,
-                message: "verification code has expired please signup again"
-            },
-            {status: 404}
-        )
-    } else{
-        return Response.json(
-            {
-                success: false,
-                message: "verification code is incorrect"
-            },
-            {status: 404}
-        )
-    }
+    if (isCodeValid && isCodeNotExpired) {
+      // Update the user's verification status
+      user.isVerified = true;
+      await user.save();
 
-
-    } catch (error) {
-    console.error("Error veryfing user: ", error)
-    return Response.json(
+      return Response.json(
+        { success: true, message: 'Account verified successfully' },
+        { status: 200 }
+      );
+    } else if (!isCodeNotExpired) {
+      // Code has expired
+      return Response.json(
         {
-            success: false,
-            message: "error veryfing user"
+          success: false,
+          message:
+            'Verification code has expired. Please sign up again to get a new code.',
         },
-        {status: 500}
-    )
-   }
+        { status: 401 }
+      );
+    } else {
+      // Code is incorrect
+      return Response.json(
+        { success: false, message: 'Incorrect verification code' },
+        { status: 400 }
+      );
+    }
+  } catch (error) {
+    console.error('Error verifying user:', error);
+    return Response.json(
+      { success: false, message: 'Error verifying user' },
+      { status: 500 }
+    );
+  }
 }

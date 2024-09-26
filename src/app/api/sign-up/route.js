@@ -1,7 +1,7 @@
-import dbConnect from "@/lib/dbConnect";
-import { sendVerificationEmail } from "../../../helper/sendVerificationEmal";
-import userModel from "@/models/user.models";
-import bcrypt from "bcrypt";
+import dbConnect from '@/lib/dbConnect';
+import userModel from '@/models/user.models';
+import bcrypt from 'bcrypt';
+import { sendVerificationEmail } from '@/helper/sendVerificationEmal';
 
 export async function POST(request) {
   await dbConnect();
@@ -15,25 +15,25 @@ export async function POST(request) {
     });
 
     if (existingVerifiedUserByUsername) {
-      return new Response(
-        JSON.stringify({
+      return Response.json(
+        {
           success: false,
           message: 'Username is already taken',
-        }),
+        },
         { status: 400 }
       );
     }
 
-    const existingUserByEmail = await userModel.findOne({ email });
+    const existingUserByEmail = await userModel.find({ email });
     let verifyCode = Math.floor(100000 + Math.random() * 900000).toString();
 
     if (existingUserByEmail) {
       if (existingUserByEmail.isVerified) {
-        return new Response(
-          JSON.stringify({
+        return Response.json(
+          {
             success: false,
             message: 'User already exists with this email',
-          }),
+          },
           { status: 400 }
         );
       } else {
@@ -69,29 +69,29 @@ export async function POST(request) {
       verifyCode
     );
     if (!emailResponse.success) {
-      return new Response(
-        JSON.stringify({
+      return Response.json(
+        {
           success: false,
           message: emailResponse.message,
-        }),
+        },
         { status: 500 }
       );
     }
 
-    return new Response(
-      JSON.stringify({
+    return Response.json(
+      {
         success: true,
         message: 'User registered successfully. Please verify your account.',
-      }),
+      },
       { status: 201 }
     );
   } catch (error) {
     console.error('Error registering user:', error);
-    return new Response(
-      JSON.stringify({
+    return Response.json(
+      {
         success: false,
         message: 'Error registering user',
-      }),
+      },
       { status: 500 }
     );
   }
