@@ -30,7 +30,8 @@ export default function VerifyAccount() {
         username: params.username,
         code: data.code,
       });
-
+      console.log("i am here");
+      
       toast({
         title: 'Success',
         description: response.data.message,
