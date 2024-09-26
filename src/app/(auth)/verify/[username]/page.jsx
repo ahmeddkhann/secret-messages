@@ -26,7 +26,7 @@ export default function VerifyAccount() {
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post(`/api/verify-code`, {
+      const response = await axios.post(`api/verify-code`, {
         username: params.username,
         code: data.code,
       });

@@ -6,12 +6,11 @@ export async function POST(request) {
   await dbConnect();
 
   try {
-    const { username, code } = await request.json();
-    // console.log(" request: ", request);
-    
-    const decodedUsername = decodeURIComponent(username);
-    const user = await userModel.findOne({ username: decodedUsername });
-    // console.log('Retrieved user:', user);
+  
+    const {username, code} = request.json();
+    const decodedUsername = decodeURIComponent(username)
+    const user = await userModel.findOne({decodedUsername})
+    console.log('Retrieved user:', user);
 
     if (!user) {
       return Response.json(
@@ -27,6 +26,8 @@ export async function POST(request) {
     console.log(user.verifyCode, code);
     console.log(user.verifyCodeExpiry, new Date() );
     
+    
+
     if (isCodeValid && isCodeNotExpired) {
       // Update the user's verification status
       user.isVerified = true;
